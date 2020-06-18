@@ -61,17 +61,18 @@ namespace ConsoleApp13
                     //if (count == 3)
                     // {
                         Thread p1 = new Thread(new ParameterizedThreadStart(updateBD));
+                        p1.IsBackground = true;
                         p1.Start(0);
 
                     // Фоновые потоки
-                        Thread p2 = new Thread(new ParameterizedThreadStart(updateBD));
-                        p2.IsBackground = true;
-                        p2.Start(500000);
-                       Thread p3 = new Thread(new ParameterizedThreadStart(updateBD));
-                        p3.IsBackground = true;
-                        p3.Start(1000000);
-                   // }
-                   
+                    Thread p2 = new Thread(new ParameterizedThreadStart(updateBD));
+                    p1.IsBackground = true;
+                    p2.Start(500000);
+                    Thread p3 = new Thread(new ParameterizedThreadStart(updateBD));
+                    p3.IsBackground = false;
+                    p3.Start(1000000);
+                    //}
+
                 }
                 else if (chose == 2)
                 {
@@ -118,11 +119,12 @@ namespace ConsoleApp13
             }
             
         }
-
+        
        
 
         private static void generatenewdata()
         {
+            
             OracleConnection conn = DBUtils.GetDBConnection();
             
             OracleCommand cmd = new OracleCommand();
@@ -158,13 +160,13 @@ namespace ConsoleApp13
             int start = (int)START;
             DateTime todayDate = DateTime.Now;
             //Console.WriteLine("Текущая дата = " + todayDate.ToShortDateString());
-            
+
             //string sql = "SELECT HASH,END_DATE,STATUS,WAITINGFOREXPORT,ID from CARDSTATUS1";
             //int finish = start + 500000-2;
             int finish = start + 499999;
-
+            //int finish = start + 5;
             //Console.WriteLine("Старт"+start+ "Стоп" + finish + "\r");
-            
+
             string sql = "select * FROM(SELECT ROWNUM rn, v.HASH, v.END_DATE,v.STATUS,v.WAITINGFOREXPORT,v.ID FROM CARDSTATUS1 v) WHERE rn >= "+start+ " AND rn <= " + finish + "";
             //string sql = "select* from(select a.*, rownum rnum from(SELECT HASH,END_DATE,STATUS,WAITINGFOREXPORT,ID from CARDSTATUS1) a where rownum <= "+finish+") where rnum >= "+start+"";
 
