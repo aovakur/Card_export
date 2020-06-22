@@ -11,6 +11,7 @@ using System.IO;
 using System.Threading;
 using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography.X509Certificates;
+using System.ComponentModel;
 
 namespace ConsoleApp13
 {
@@ -28,6 +29,9 @@ namespace ConsoleApp13
 
             while (true)
             {
+                
+                
+
                 Console.WriteLine("Пункт меню");
                 Console.WriteLine("1 Обновить поля STATUS и WAITINGFOREXPORT");
                 Console.WriteLine("2 Экспорт в csv");
@@ -159,6 +163,12 @@ namespace ConsoleApp13
         }
         private static void exporttocsv()
         {
+
+            int worker = 5;
+            int port = 5;
+            bool v = ThreadPool.SetMaxThreads(worker, port);
+            Console.WriteLine(v);
+
             OracleConnection conn = DBUtils.GetDBConnection();
             conn.Open();
 
@@ -199,7 +209,11 @@ namespace ConsoleApp13
                                     cmd1.CommandText = sqlupdatewaitingforexport;
                                     cmd1.ExecuteNonQuery();
                                     conn3.Close();
-                                    //Console.WriteLine("Обновление произошло" + ID);
+                                    Console.WriteLine("Обновление произошло" + ID);
+                                    //Thread.Sleep(5000);
+                                    //ThreadPool.GetAvailableThreads(out workerThreads, out portThreads);
+                                    
+
                                 }
                                 finally
                                 {
